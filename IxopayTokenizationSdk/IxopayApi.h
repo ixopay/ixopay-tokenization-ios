@@ -11,11 +11,12 @@
 
 @interface IxopayApi : NSObject
 
-@property (strong, nonatomic) NSString* host;
+@property (strong, nonatomic) NSString* gatewayHost;
+@property (strong, nonatomic) NSString* tokenizationHost;
 @property (strong, nonatomic) NSString* publicIntegrationKey;
 
 - (instancetype)initWithPublicIntegrationKey:(NSString *)publicIntegrationKey;
-- (instancetype)initWithHost:(NSString *)host AndPublicIntegrationKey:(NSString *)publicIntegrationKey;
+- (instancetype)initWithGatewayHost:(NSString *)gatewayHost TokenizationHost:(NSString *)tokenizationHost AndPublicIntegrationKey:(NSString *)publicIntegrationKey;
 
 - (void)tokenizeCardData:(CardData *)cardData onComplete:(void (^)(Token *token))completeHandler onError:(void(^)(NSArray<Error*> *errors))errorHandler;
 

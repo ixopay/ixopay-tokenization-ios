@@ -11,7 +11,8 @@
 
 - (instancetype)init {
     self = [super init];
-    self.host = @"https://gateway.ixopay.com";
+    self.gatewayHost = @"https://gateway.ixopay.com";
+    self.tokenizationHost = @"https://secure.ixopay.com";
     return self;
 }
 
@@ -21,17 +22,23 @@
     return self;
 }
 
+
 /**
  host format: @"https://gateway.ixopay.com" (for Production) resp. @"https://sandbox.ixopay.com" (for Sandbox Environment)
  */
-- (instancetype)initWithHost:(NSString *)host AndPublicIntegrationKey:(NSString *)publicIntegrationKey {
+- (instancetype)initWithGatewayHost:(NSString *)gatewayHost TokenizationHost:(NSString *)tokenizationHost AndPublicIntegrationKey:(NSString *)publicIntegrationKey {
     self = [super init];
     
     //prepend https if not defined
-    if (![[host substringToIndex:5] isEqualToString:@"http"])  {
-        host = [@"https://" stringByAppendingString:host];
+    if (![[gatewayHost substringToIndex:4] isEqualToString:@"http"])  {
+        gatewayHost = [@"https://" stringByAppendingString:gatewayHost];
     }
-    self.host = host;
+    if (![[tokenizationHost substringToIndex:4] isEqualToString:@"http"])  {
+        tokenizationHost = [@"https://" stringByAppendingString:tokenizationHost];
+    }
+    
+    self.gatewayHost = gatewayHost;
+    self.tokenizationHost = tokenizationHost;
     self.publicIntegrationKey = publicIntegrationKey;
     
     return self;
@@ -41,7 +48,10 @@
 - (void)tokenizeCardData:(CardData *)cardData onComplete:(void (^)(Token *token))completeHandler onError:(void(^)(NSArray<Error*> *errors))errorHandler {
     
     //get tokenization endpoint
-    [self getTokenizationUrl:^(NSString *tokenizationUrl) {
+    [self getTokenizationKey:^(NSString *tokenizationKey) {
+        
+        NSString *tokenizeUrl = [NSString stringWithFormat:@"%@/v1/%@/tokenize/creditcard", self.tokenizationHost, tokenizationKey];
+        
         //tokenize card
         NSMutableArray *queryItems = [NSMutableArray array];
 
@@ -57,7 +67,7 @@
         [queryItems addObject:[NSURLQueryItem queryItemWithName:@"month" value:cardData.expirationMonth.stringValue]];
         [queryItems addObject:[NSURLQueryItem queryItemWithName:@"year" value:cardData.expirationYear.stringValue]];
         
-        NSURLComponents *urlComp = [NSURLComponents componentsWithString:tokenizationUrl];
+        NSURLComponents *urlComp = [NSURLComponents componentsWithString:tokenizeUrl];
         [urlComp setQueryItems:queryItems];
         
         //NSLog(@"Sending request to %@", urlComp.URL.absoluteString);
@@ -119,9 +129,9 @@
 
 }
 
-- (void)getTokenizationUrl:(void (^)(NSString *tokenizationUrl))completeHandler onError:(void(^)(NSArray<Error*> *errors))errorHandler {
+- (void)getTokenizationKey:(void (^)(NSString *tokenizationKey))completeHandler onError:(void(^)(NSArray<Error*> *errors))errorHandler {
 
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/integrated/tokenizationEndpoint/%@", self.host, self.publicIntegrationKey]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/integrated/getTokenizationKey/%@", self.gatewayHost, self.publicIntegrationKey]];
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
     
     //NSLog(@"Sending request to %@", url.absoluteString);
@@ -175,11 +185,11 @@
         }
         
         //now we are fine
-        NSString *tokenizationUrl = [json objectForKey:@"tokenizationUrl"];
+        NSString *tokenizationKey = [json objectForKey:@"tokenizationKey"];
         
-        NSLog(@"Tokenize URL is: %@", tokenizationUrl);
+        //NSLog(@"Tokenization Key is: %@", tokenizationKey);
         
-        completeHandler(tokenizationUrl);
+        completeHandler(tokenizationKey);
         return;
     }] resume];
 }
