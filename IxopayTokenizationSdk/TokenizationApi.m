@@ -4,10 +4,10 @@
 //  Copyright © 2019 IXOPAY GmbH. All rights reserved.
 //
 
-#import "IxopayApi.h"
+#import "TokenizationApi.h"
 #import "Token.h"
 
-@implementation IxopayApi
+@implementation TokenizationApi
 
 - (instancetype)init {
     self = [super init];
@@ -49,37 +49,28 @@
     
     //get tokenization endpoint
     [self getTokenizationKey:^(NSString *tokenizationKey) {
-        
-        NSString *tokenizeUrl = [NSString stringWithFormat:@"%@/v1/%@/tokenize/creditcard", self.tokenizationHost, tokenizationKey];
-        
         //tokenize card
-        NSMutableArray *queryItems = [NSMutableArray array];
+        NSString *tokenizeUrl = [NSString stringWithFormat:@"%@/v1/%@/tokenize/creditcard", self.tokenizationHost, tokenizationKey];
 
+        NSMutableString *reqData = [[NSMutableString alloc] initWithFormat:@"cardHolder=%@&month=%@&year=%@", cardData.cardHolder, cardData.expirationMonth.stringValue, cardData.expirationYear.stringValue];
         //Build Request Data
         if (cardData.cvv && ![cardData.cvv isEqualToString:@""]) {
-            [queryItems addObject:[NSURLQueryItem queryItemWithName:@"pan" value:cardData.pan]];
-            [queryItems addObject:[NSURLQueryItem queryItemWithName:@"cvv" value:cardData.cvv]];
+            [reqData appendFormat:@"&pan=%@&cvv=%@", cardData.pan, cardData.cvv];
         } else {
-            [queryItems addObject:[NSURLQueryItem queryItemWithName:@"panonly" value:cardData.pan]];
-        }
+            [reqData appendFormat:@"&panonly=%@", cardData.pan];
 
-        [queryItems addObject:[NSURLQueryItem queryItemWithName:@"cardHolder" value:cardData.cardHolder]];
-        [queryItems addObject:[NSURLQueryItem queryItemWithName:@"month" value:cardData.expirationMonth.stringValue]];
-        [queryItems addObject:[NSURLQueryItem queryItemWithName:@"year" value:cardData.expirationYear.stringValue]];
+        }
         
-        NSURLComponents *urlComp = [NSURLComponents componentsWithString:tokenizeUrl];
-        [urlComp setQueryItems:queryItems];
+//        NSLog(@"Sending request to %@", tokenizeUrl);
         
-        //NSLog(@"Sending request to %@", urlComp.URL.absoluteString);
-        
-        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:urlComp.URL];
+        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[[NSURL alloc] initWithString:tokenizeUrl]];
         [req setHTTPMethod:@"POST"];
+        [req setHTTPBody:[reqData dataUsingEncoding:NSUTF8StringEncoding]];
         
         //Send Request
         [[[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            
-            //NSLog(@"Token response: %@", json);
+
+//            NSLog(@"Token response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             
             //Error handling first
             NSError *e = nil;
@@ -134,17 +125,17 @@
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/integrated/getTokenizationKey/%@", self.gatewayHost, self.publicIntegrationKey]];
     NSURLRequest *req = [NSURLRequest requestWithURL:url];
     
-    //NSLog(@"Sending request to %@", url.absoluteString);
+//    NSLog(@"Sending request to %@", url.absoluteString);
     
     [[[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        //NSLog(@"Got some response");
+//        NSLog(@"Got some response");
         if (error) {
             NSArray *errors = [[NSArray alloc] initWithObjects:[[Error alloc] initWithField:nil Message:error.description Code:@"REQUEST_ERROR"], nil];
             errorHandler(errors);
             return;
         }
-        //NSLog(@"No error");
+//        NSLog(@"No error");
         
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
             NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
@@ -160,7 +151,7 @@
             }
         }
         
-        //NSLog(@"Status 200");
+//        NSLog(@"Status 200");
         
         NSError *e = nil;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&e];
@@ -187,7 +178,7 @@
         //now we are fine
         NSString *tokenizationKey = [json objectForKey:@"tokenizationKey"];
         
-        //NSLog(@"Tokenization Key is: %@", tokenizationKey);
+//        NSLog(@"Tokenization Key is: %@", tokenizationKey);
         
         completeHandler(tokenizationKey);
         return;

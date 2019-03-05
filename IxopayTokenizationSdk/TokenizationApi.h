@@ -9,7 +9,7 @@
 #import "Error.h"
 #import "Token.h"
 
-@interface IxopayApi : NSObject
+@interface TokenizationApi : NSObject
 
 @property (strong, nonatomic) NSString* gatewayHost;
 @property (strong, nonatomic) NSString* tokenizationHost;
