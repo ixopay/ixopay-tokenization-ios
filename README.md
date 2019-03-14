@@ -1,6 +1,20 @@
 # ixopay-tokenization-ios
 
+[![Version](https://img.shields.io/cocoapods/v/IxopayTokenizationSdk.svg?style=flat)](https://cocoapods.org/pods/IxopayTokenizationSdk)
+[![License](https://img.shields.io/cocoapods/l/IxopayTokenizationSdk.svg?style=flat)](https://cocoapods.org/pods/IxopayTokenizationSdk)
+[![Platform](https://img.shields.io/cocoapods/p/IxopayTokenizationSdk.svg?style=flat)](https://cocoapods.org/pods/IxopayTokenizationSdk)
+
 This SDK enables you to tokenize card data natively from your iOS application to our PCI-certified servers.
+
+## Installation
+
+IxopayTokenizationSdk is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'IxopayTokenizationSdk'
+```
+
 
 ## Usage
 
