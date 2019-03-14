@@ -24,12 +24,12 @@ Instantiate the `IxopayApi` class with your public integration key (and optional
 
 ```objective-c
 
-#import "IxopayTokenizationSdk/CardData.h"
-#import "IxopayTokenizationSdk/IxopayApi.h"
+#import <IxopayTokenizationSdk.h>
 
 ...
 
 
+// Preprate cardData
 CardData *cardData = [[CardData alloc] init];
 cardData.pan = @"CARD NUMBER";
 cardData.cvv = @"CVV";
@@ -37,16 +37,26 @@ cardData.cardHolder = @"CARD HOLDER";
 cardData.expirationMonth = [NSNumber numberWithInt:4];
 cardData.expirationYear = [NSNumber numberWithInt:2025];
 
-IxopayApi *ixopay = [[IxopayApi alloc] initWithPublicIntegrationKey:@"PUBLIC_INTEGRATION_KEY"];
-[ixopay tokenizeCardData:cardData onComplete:^(Token *token) {
-        NSLog(@"Success, token is: %@ ; fingerprint: %@", token.token, token.fingerprint);
+// Initialize API object
+TokenizationApi *ixopay = [[TokenizationApi alloc] initWithPublicIntegrationKey:@"PUBLIC_INTEGRATION_KEY"];
 
-    } onError:^(NSError *error) {
-        NSLog(@"Error occurred: Code %d", error.code);
-        [error.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            NSLog(@"Field %@, Message: %@", key, obj);
-        }];
+// Tokenize cardData
+[ixopay tokenizeCardData:cardData onComplete:^(Token *token) {
+	// Tokenization successful
+    NSLog(@"Success, token is: %@ ; fingerprint: %@", 
+		token.token, 
+		token.fingerprint);
+    
+} onError:^(NSError *error) {
+	// Errors occurred
+    NSLog(@"Error occurred: Code %d", error.code);
+
+    [error.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSLog(@"Field %@, Message: %@", key, obj);
     }];
+
+}];
+
 
 ```
 
