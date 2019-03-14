@@ -23,20 +23,17 @@ cardData.cardHolder = @"CARD HOLDER";
 cardData.expirationMonth = [NSNumber numberWithInt:4];
 cardData.expirationYear = [NSNumber numberWithInt:2025];
 
-IxopayApi *ixopay = [[IxopayApi alloc] initWithPublicIntegrationKey:@"PUBLIC_INTEGRATION_KEY];
+IxopayApi *ixopay = [[IxopayApi alloc] initWithPublicIntegrationKey:@"PUBLIC_INTEGRATION_KEY"];
 [ixopay tokenizeCardData:cardData onComplete:^(Token *token) {
-	//process token, and continue with transaction sending
         NSLog(@"Success, token is: %@ ; fingerprint: %@", token.token, token.fingerprint);
 
-    } onError:^(NSArray<Error *> *errors) {
-	//Errors occurred, handle accordingly
-        NSLog(@"Error occurred:");
-        [errors enumerateObjectsUsingBlock:^(Error * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSLog(@"%@", obj.message);
+    } onError:^(NSError *error) {
+        NSLog(@"Error occurred: Code %d", error.code);
+        [error.userInfo enumerateKeysAndObjectsUsingBlock:^(NSErrorUserInfoKey  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            NSLog(@"Field %@, Message: %@", key, obj);
         }];
+    }];
 
-    }
-];
 ```
 
 
