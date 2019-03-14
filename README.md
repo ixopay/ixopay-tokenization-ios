@@ -1,10 +1,6 @@
-# IXOPAY iOS Tokenization SDK
+# ixopay-tokenization-ios
 
 This SDK enables you to tokenize card data natively from your iOS application to our PCI-certified servers.
-
-## Requirements
-
-This SDK is compatible with iOS 9.0 and above
 
 ## Usage
 
@@ -44,3 +40,19 @@ IxopayApi *ixopay = [[IxopayApi alloc] initWithPublicIntegrationKey:@"PUBLIC_INT
 ```
 
 
+## Development
+
+### Requirements
+- iOS 9.0 or higher
+- Xcode 8.0 or higher (to build source)
+
+### Dependencies
+- none
+
+## License
+
+[LICENSE](LICENSE)
+
+## Changelog
+
+[CHANGELOG.md](CHANGELOG.md)
