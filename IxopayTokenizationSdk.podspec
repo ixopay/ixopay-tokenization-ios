@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://www.ixopay.com'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'IXOPAY' => 'support@ixopay.com' }
-  s.source           = { :git => 'https://github.com/Ixolit/ixopay-tokenization-ios.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/ixopay/ixopay-tokenization-ios.git', :tag => s.version.to_s }
 
   s.platform          = :ios, '9.0'
   s.requires_arc      = true
