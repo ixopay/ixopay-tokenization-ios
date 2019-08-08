@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'IxopayTokenizationSdk'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'IXOPAY iOS Tokenization SDK'
   s.description      = <<-DESC
                         This SDK enables your App to tokenize a user's card details to IXOPAY's PCI VAULT directly
