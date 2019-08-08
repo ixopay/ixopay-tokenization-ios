@@ -24,7 +24,7 @@
 			containerPortal = A94C85FF223A47CA00190295 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A94C8607223A47CA00190295;
-			remoteInfo = IxopayTokenizationSdk;
+			remoteInfo = GpcTokenizationSdk;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -135,7 +135,7 @@
 			dependencies = (
 			);
 			name = GpcTokenizationSdk;
-			productName = IxopayTokenizationSdk;
+			productName = GpcTokenizationSdk;
 			productReference = A94C8608223A47CA00190295 /* GpcTokenizationSdk.framework */;
 			productType = "com.apple.product-type.framework";
 		};
@@ -153,7 +153,7 @@
 				A94C8614223A47CA00190295 /* PBXTargetDependency */,
 			);
 			name = GpcTokenizationSdkTests;
-			productName = IxopayTokenizationSdkTests;
+			productName = GpcTokenizationSdkTests;
 			productReference = A94C8611223A47CA00190295 /* GpcTokenizationSdkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -164,7 +164,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0940;
-				ORGANIZATIONNAME = "IXOPAY GmbH";
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					A94C8607223A47CA00190295 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -405,13 +405,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = IxopayTokenizationSdkTests/Info.plist;
+				INFOPLIST_FILE = GpcTokenizationSdkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ixopay.IxopayTokenizationSdkTests;
+				PRODUCT_BUNDLE_IDENTIFIER = cloud.paymentgateway.GpcTokenizationSdkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -421,13 +421,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = IxopayTokenizationSdkTests/Info.plist;
+				INFOPLIST_FILE = GpcTokenizationSdkTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ixopay.IxopayTokenizationSdkTests;
+				PRODUCT_BUNDLE_IDENTIFIER = cloud.paymentgateway.GpcTokenizationSdkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
