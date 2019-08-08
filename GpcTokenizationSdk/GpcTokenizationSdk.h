@@ -1,19 +1,17 @@
 //
-//  IxopayTokenizationSdk.h
-//  IxopayTokenizationSdk
-//
-//  Copyright © 2019 IXOPAY GmbH. All rights reserved.
+//  GpcTokenizationSdk.h
+//  GpcTokenizationSdk
 //
 
 #import <UIKit/UIKit.h>
 
-//! Project version number for IxopayTokenizationSdk.
-FOUNDATION_EXPORT double IxopayTokenizationSdkVersionNumber;
+//! Project version number for GpcTokenizationSdk.
+FOUNDATION_EXPORT double GpcTokenizationSdkVersionNumber;
 
-//! Project version string for IxopayTokenizationSdk.
-FOUNDATION_EXPORT const unsigned char IxopayTokenizationSdkVersionString[];
+//! Project version string for GpcTokenizationSdk.
+FOUNDATION_EXPORT const unsigned char GpcTokenizationSdkVersionString[];
 
-#import <IxopayTokenizationSdk/CardData.h>
-#import <IxopayTokenizationSdk/Token.h>
-#import <IxopayTokenizationSdk/TokenizationApi.h>
+#import <GpcTokenizationSdk/CardData.h>
+#import <GpcTokenizationSdk/Token.h>
+#import <GpcTokenizationSdk/TokenizationApi.h>
 
