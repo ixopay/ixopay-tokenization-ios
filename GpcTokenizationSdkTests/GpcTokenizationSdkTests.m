@@ -1,20 +1,18 @@
 //
-//  IxopayTokenizationSdkTests.m
-//  IxopayTokenizationSdkTests
-//
-//  Copyright © 2019 IXOPAY GmbH. All rights reserved.
+//  GpcTokenizationSdkTests.m
+//  GpcTokenizationSdkTests
 //
 
 #import <XCTest/XCTest.h>
-#import "../IxopayTokenizationSdk/Token.h"
-#import "../IxopayTokenizationSdk/CardData.h"
-#import "../IxopayTokenizationSdk/TokenizationApi.h"
+#import "../GpcTokenizationSdk/Token.h"
+#import "../GpcTokenizationSdk/CardData.h"
+#import "../GpcTokenizationSdk/TokenizationApi.h"
 
-@interface IxopayTokenizationSdkTests : XCTestCase
+@interface GpcTokenizationSdkTests : XCTestCase
 
 @end
 
-@implementation IxopayTokenizationSdkTests
+@implementation GpcTokenizationSdkTests
 
 - (void)setUp {
     [super setUp];
@@ -63,9 +61,9 @@
     
     NSString *publicIntegrationKey = @"INPUT_HERE";
     
-    TokenizationApi *ixopay = [[TokenizationApi alloc] initWithGatewayHost:@"https://gateway.ixopay.com" TokenizationHost:@"https://secure.ixopay.com" AndPublicIntegrationKey:publicIntegrationKey];
+    TokenizationApi *tokenizationApi = [[TokenizationApi alloc] initWithGatewayHost:@"https://gateway.HOSTNAME.com" TokenizationHost:@"https://secure.HOSTNAME.com" AndPublicIntegrationKey:publicIntegrationKey];
 
-    [ixopay tokenizeCardData:cardData onComplete:^(Token *token) {
+    [tokenizationApi tokenizeCardData:cardData onComplete:^(Token *token) {
         NSLog(@"Success, token is: %@ ; fingerprint: %@", token.token, token.fingerprint);
     } onError:^(NSError *error) {
         NSLog(@"Error occurred: Code %d", error.code);

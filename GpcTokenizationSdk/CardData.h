@@ -1,8 +1,6 @@
 //
 //  CardData.h
 //
-//  Copyright © 2019 IXOPAY GmbH. All rights reserved.
-//
 
 #import <Foundation/Foundation.h>
 

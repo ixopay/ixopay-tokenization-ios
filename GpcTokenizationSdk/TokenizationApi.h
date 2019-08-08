@@ -1,27 +1,25 @@
 //
-//  IxopayApi.h
-//
-//  Copyright © 2019 IXOPAY GmbH. All rights reserved.
+//  TokenizationApi.h
 //
 
 #import <Foundation/Foundation.h>
 #import "CardData.h"
 #import "Token.h"
 
-typedef void (^IxopayLoggerFunc) (NSString* logMsg);
+typedef void (^GpcLoggerFunc) (NSString* logMsg);
 typedef enum {
-    IxopayInvalidPublicIntegrationKey = -401,
-    IxopayRequestFailed = -500,
-    IxopayValueValidationFailed = 1002,
-    IxopayTokenizationNotSupported = 3002
-} IxopayErrorCode;
+    GpcInvalidPublicIntegrationKey = -401,
+    GpcRequestFailed = -500,
+    GpcValueValidationFailed = 1002,
+    GpcTokenizationNotSupported = 3002
+} GpcErrorCode;
 
 @interface TokenizationApi : NSObject
 
 @property (strong, nonatomic) NSString* gatewayHost;
 @property (strong, nonatomic) NSString* tokenizationHost;
 @property (strong, nonatomic) NSString* publicIntegrationKey;
-@property (strong, nonatomic) IxopayLoggerFunc loggerFunc;
+@property (strong, nonatomic) GpcLoggerFunc loggerFunc;
 
 - (instancetype)initWithPublicIntegrationKey:(NSString *)publicIntegrationKey;
 - (instancetype)initWithGatewayHost:(NSString *)gatewayHost TokenizationHost:(NSString *)tokenizationHost AndPublicIntegrationKey:(NSString *)publicIntegrationKey;

@@ -1,7 +1,5 @@
 //
-//  IxopayApi.m
-//
-//  Copyright © 2019 IXOPAY GmbH. All rights reserved.
+//  TokenizationApi.m
 //
 
 #import "TokenizationApi.h"
@@ -17,13 +15,13 @@
 
 - (instancetype)init {
     self = [super init];
-    self.gatewayHost = @"https://gateway.ixopay.com";
-    self.tokenizationHost = @"https://secure.ixopay.com";
+    self.gatewayHost = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"gatewayHost"];
+    self.tokenizationHost = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"tokenizationHost"];
     return self;
 }
 
 /**
-  publicIntegrationKey as defined in IXOPAY Gateway (or given by your integration engineer)
+  publicIntegrationKey as defined in the Gateway (or given by your integration engineer)
  */
 - (instancetype)initWithPublicIntegrationKey:(NSString *)publicIntegrationKey {
     self = [self init];
@@ -33,7 +31,7 @@
 
 
 /**
- host format: @"https://gateway.ixopay.com" (for Production) resp. @"https://sandbox.ixopay.com" (for Sandbox Environment)
+ host format: @"https://sub.domain.com"
  */
 - (instancetype)initWithGatewayHost:(NSString *)gatewayHost TokenizationHost:(NSString *)tokenizationHost AndPublicIntegrationKey:(NSString *)publicIntegrationKey {
     self = [super init];
@@ -121,7 +119,7 @@
         
         if (!result) {
             [self logMsg:@"Tokenization returned unexpected response"];
-            NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
+            NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 errorHandler(error);
             });
@@ -130,7 +128,7 @@
         
         if (![[result objectForKey:@"success"] isKindOfClass:[NSNumber class]]) {
             [self logMsg:@"Tokenization returned unexpected response"];
-            NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
+            NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 errorHandler(error);
             });
@@ -148,7 +146,7 @@
                     [userData setObject:fieldError forKey:field];
                 }];
             }];
-            NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayValueValidationFailed userInfo:userData];
+            NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcValueValidationFailed userInfo:userData];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 errorHandler(error);
@@ -193,13 +191,13 @@
             
             //Check for error HTTP status codes
             if (statusCode == 401) {
-                NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayInvalidPublicIntegrationKey userInfo:[NSDictionary dictionaryWithObject:@"Invalid public integration key" forKey:@"request"]];
+                NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcInvalidPublicIntegrationKey userInfo:[NSDictionary dictionaryWithObject:@"Invalid public integration key" forKey:@"request"]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     errorHandler(error);
                 });
                 return;
             } else if (statusCode != 200) {
-                NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Request failed" forKey:@"request"]];
+                NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Request failed" forKey:@"request"]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     errorHandler(error);
                 });
@@ -213,7 +211,7 @@
         //Check for valid json
         if (!json) {
             [self logMsg:@"Response has unexpected content"];
-            NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
+            NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 errorHandler(error);
@@ -224,7 +222,7 @@
         //Check success indicator
         if (![[json objectForKey:@"success"] isKindOfClass:[NSNumber class]]) {
             [self logMsg:@"Response has unexpected content"];
-            NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:IxopayRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
+            NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:GpcRequestFailed userInfo:[NSDictionary dictionaryWithObject:@"Unexpected response" forKey:@"request"]];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 errorHandler(error);
@@ -236,7 +234,7 @@
         if ([status boolValue] == false) {
             [self logMsg:@"Response status = false"];
             NSNumber *errorCode = [json objectForKey:@"error_code"];
-            NSError *error = [NSError errorWithDomain:@"com.ixopay.IxopayTokenizationSdk" code:errorCode.integerValue userInfo:[NSDictionary dictionaryWithObject:[json objectForKey:@"error_message"] forKey:([json objectForKey:@"field"] != nil ? [json objectForKey:@"field"] : @"request")]];
+            NSError *error = [NSError errorWithDomain:@"cloud.paymentgateway.PgcTokenizationSdk" code:errorCode.integerValue userInfo:[NSDictionary dictionaryWithObject:[json objectForKey:@"error_message"] forKey:([json objectForKey:@"field"] != nil ? [json objectForKey:@"field"] : @"request")]];
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 errorHandler(error);
